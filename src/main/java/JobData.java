@@ -5,10 +5,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -33,28 +30,55 @@ public class JobData {
         loadData();
 
         ArrayList<String> values = new ArrayList<>();
+        ArrayList<String> valuesLowered = new ArrayList<>();
 
         for (HashMap<String, String> row : allJobs) {
             String aValue = row.get(field);
 
-            if (!values.contains(aValue)) {
+            if (!valuesLowered.contains(aValue.toLowerCase())) {
                 values.add(aValue);
+                valuesLowered.add(aValue.toLowerCase());
             }
         }
-
-        // Bonus mission: sort the results
-        Collections.sort(values);
-
+        Collections.sort(values, Alphabetical_Order);
         return values;
     }
+
+    private static final Comparator<String> Alphabetical_Order = new Comparator<String>() {
+        public int compare(String str1, String str2) {
+            int result;
+            if (!Character.isLetter(str1.charAt(0))) {
+                // complete comparison using str.charAt(1) instead of normal comparison
+                result = String.CASE_INSENSITIVE_ORDER.compare(str1.substring(1), str2);
+                if (result == 0) {
+                    result = str1.compareTo(str2);
+                }
+            } else if (!Character.isLetter(str2.charAt(0))) {
+                // complete comparison using str.charAt(1) instead of normal comparison
+                result = String.CASE_INSENSITIVE_ORDER.compare(str1, str2.substring(1));
+                if (result == 0) {
+                    result = str1.compareTo(str2);
+                }
+            } else {
+                // complete with normal compare method below
+                result = String.CASE_INSENSITIVE_ORDER.compare(str1, str2);
+                if (result == 0) {
+                    result = str1.compareTo(str2);
+                }
+
+            }
+            return result;
+        }
+    };
 
     public static ArrayList<HashMap<String, String>> findAll() {
 
         // load data, if not already loaded
         loadData();
 
-        // Bonus mission; normal version returns allJobs
-        return new ArrayList<>(allJobs);
+        ArrayList<HashMap<String, String>> allJobsConsumable = new ArrayList(allJobs);
+
+        return allJobsConsumable;
     }
 
     /**
@@ -74,13 +98,14 @@ public class JobData {
         loadData();
 
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+        //ArrayList<String> jobsLowered = new ArrayList<>();
 
         for (HashMap<String, String> row : allJobs) {
-
             String aValue = row.get(column);
 
-            if (aValue.contains(value)) {
+            if (aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(row);
+                //jobsLowered.add(row.get(column).toLowerCase());
             }
         }
 
@@ -90,16 +115,29 @@ public class JobData {
     /**
      * Search all columns for the given term
      *
-     * @param value The search term to look for
-     * @return      List of all jobs with at least one field containing the value
+     * //@param //value The search term to look for
+     * //@return      List of all jobs with at least one field containing the value
      */
-    public static ArrayList<HashMap<String, String>> findByValue(String value) {
-
-        // load data, if not already loaded
+    public static ArrayList<HashMap<String, String>> findByValue(String term) {
+        // load data if we need to
         loadData();
 
-        // TODO - implement this method
-        return null;
+        ArrayList<HashMap<String, String>> results = new ArrayList<>();
+
+        // do the search
+        for (HashMap<String, String> job : allJobs) {
+            for (Map.Entry<String, String> data : job.entrySet()) {
+                if (data.getValue().toLowerCase().contains(term.toLowerCase())) {
+                    if (!results.contains(job)) {
+                        results.add(job);
+                    }
+                }
+            }
+        }
+
+        // exclude duplicates
+
+        return results;
     }
 
     /**
