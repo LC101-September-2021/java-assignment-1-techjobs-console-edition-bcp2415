@@ -123,11 +123,11 @@ public class TechJobs {
             System.out.println("No results");
         } else {
             for (int i = 0; i < someJobs.size(); i++) {
-                System.out.println("*****");
+                System.out.println("\n*****");
                 for (Map.Entry<String, String> job : someJobs.get(i).entrySet()) {
                     System.out.println(job.getKey() + ": " + job.getValue());
                 }
-                //System.out.println("*****");
+                System.out.println("*****");
             }
 
         }
