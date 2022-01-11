@@ -120,7 +120,7 @@ public class TechJobs {
     // Print a list of jobs
     private static void printJobs(ArrayList<HashMap<String, String>> someJobs) {
         if (someJobs.isEmpty()) {
-            System.out.println("Your search did not return any results.");
+            System.out.println("No results");
         } else {
             for (int i = 0; i < someJobs.size(); i++) {
                 System.out.println("*****");
