@@ -44,7 +44,7 @@ public class JobData {
         return values;
     }
 
-    private static Comparator<String> Alphabetical_Order = new Comparator<String>() {
+    private static final Comparator<String> Alphabetical_Order = new Comparator<String>() {
         public int compare(String str1, String str2) {
             int result;
             if (!Character.isLetter(str1.charAt(0))) {
@@ -98,14 +98,14 @@ public class JobData {
         loadData();
 
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
-        ArrayList<String> jobsLowered = new ArrayList<>();
+        //ArrayList<String> jobsLowered = new ArrayList<>();
 
         for (HashMap<String, String> row : allJobs) {
             String aValue = row.get(column);
 
             if (aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(row);
-                jobsLowered.add(row.get(column).toLowerCase());
+                //jobsLowered.add(row.get(column).toLowerCase());
             }
         }
 
@@ -115,8 +115,8 @@ public class JobData {
     /**
      * Search all columns for the given term
      *
-     * @param value The search term to look for
-     * @return      List of all jobs with at least one field containing the value
+     * //@param //value The search term to look for
+     * //@return      List of all jobs with at least one field containing the value
      */
     public static ArrayList<HashMap<String, String>> findByValue(String term) {
         // load data if we need to
